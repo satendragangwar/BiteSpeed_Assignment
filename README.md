@@ -1,61 +1,81 @@
 
 # Bitespeed Contact Identification Assignment
 
+  
+
 This backend service is designed to identify and consolidate contact information based on email addresses and phone numbers. It efficiently manages contact records, linking secondary contacts to primary ones based on shared identifiers.
 
 ## Technologies Used
 
--  **Backend Framework:**  [Node.js](https://nodejs.org/) with [Express.js](https://expressjs.com/)
--  **Language:**  [TypeScript](https://www.typescriptlang.org/)
--  **ORM (Object-Relational Mapper):**  [Drizzle ORM](https://orm.drizzle.team/)
--  **Database:**  [PostgreSQL](https://www.postgresql.org/) (using [Neon](https://neon.tech/) serverless database)
--  **Hosting:**  [Render](https://render.com/)
-
+*  **Backend Framework:** Node.js with Express.js
+*  **Language:** TypeScript
+*  **ORM (Object-Relational Mapper):** Drizzle ORM
+*  **Database:** PostgreSQL (using Neon serverless database)
+*  **Hosting:** Render
+* 
 ## Endpoints
-### `POST /identify/`
+
+### POST /identify/
+
 This endpoint is used to identify or create contacts based on the provided email and/or phone number.
 
 #### Request Body (JSON):
 
 ```json
+
 {
 "email":  "string (optional, email format)",
 "phoneNumber":  "string (optional, phone number format)"
 }
-
-curl -X POST \\
--H "Content-Type: application/json" \\
--d '{"email":  "test@example.com",  "phoneNumber":  "1234567890"}'
-https://bitespeed-assignment-0e2a.onrender.com/identify/
-
 ```
 
-## Technologies Used
+#### Example cURL Request:
 
-If both email and phone number exist in the database, they are linked to the same primary contact.
-If only one of them exists, a new secondary contact is created and linked to the primary.
-If neither exists, a new primary contact is created.
+```sh
+
+curl  -X  POST \
+-H "Content-Type: application/json" \
+-d  '{"email": "test@example.com", "phoneNumber": "1234567890"}' \
+https://bitespeed-assignment-0e2a.onrender.com/identify/
+```
+
+## Contact Linking Logic
+
+* If both email and phone number exist in the database, they are linked to the same primary contact.
+* If only one of them exists, a new secondary contact is created and linked to the primary contact.
+* If neither exists, a new primary contact is created.
 
 ## Setup & Installation
 
-* Clone the repository:
-````bash
-git clone https://github.com/yourusername/bitespeed-contact-identification.git
-```bash
-cd bitespeed-contact-identification
+### Clone the Repository:
 
-* Install dependencies:
-```bash
-npm install
+```sh
+git  clone  https://github.com/yourusername/bitespeed-contact-identification.git
+```
+```sh
+cd  bitespeed-contact-identification
+```
 
+### Install Dependencies:
 
-## Set up environment variables in a .env file:
-```bash
-POST =
+```sh
+npm  install
+```
+
+### Set Up Environment Variables:
+
+Create a `.env` file in the root directory and add the following:
+```env
+PORT=your_port_number
 DATABASE_URL=your_postgresql_connection_string
-## Run the application:
-```bash
-npm run dev
+```
 
-##  Deployment
-This project is deployed on Render. You can test the live API at: https://bitespeed-assignment-0e2a.onrender.com
+### Run the Application:
+```sh
+npm  run  dev
+```
+
+## Deployment
+
+This project is deployed on Render. You can test the live API at:
+https://bitespeed-assignment-0e2a.onrender.com
