@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { eq, or, desc, asc } from "drizzle-orm"; // Import 'asc' for ascending order
+import { eq, or, desc, asc } from "drizzle-orm";
 import { db, contacts } from "../db";
 
 interface ConsolidatedContact {
@@ -16,19 +16,18 @@ export const identifyContact = async (
   try {
     const { email, phoneNumber } = req.body;
 
-    // Find all contacts that match either email or phone number, ordered by createdAt ASC (oldest first)
     const matchingContacts = await db
       .select()
       .from(contacts)
       .where(
         or(eq(contacts.email, email), eq(contacts.phoneNumber, phoneNumber))
       )
-      .orderBy(asc(contacts.createdAt)); // Order by createdAt in ascending order (oldest first)
+      .orderBy(asc(contacts.createdAt)); 
 
-    let primaryContact; // Declare primaryContact outside the if block
+    let primaryContact; 
 
     if (matchingContacts.length === 0) {
-      // Create new primary contact if no matching contacts found
+      
       const [newContact] = await db
         .insert(contacts)
         .values({
@@ -38,7 +37,7 @@ export const identifyContact = async (
         })
         .returning();
 
-      primaryContact = newContact; // Assign new primary contact
+      primaryContact = newContact; 
       res.json({
         contact: {
           primaryContactId: newContact.id,
@@ -47,17 +46,17 @@ export const identifyContact = async (
           secondaryContactIds: [],
         },
       });
-      return; // Return early as it's a new primary contact
+      return; 
     } else {
-      // Matching contacts found
+      
 
-      // Find the oldest primary contact among matching contacts
+    
       primaryContact =
         matchingContacts.find(
           (contact) => contact.linkPrecedence === "primary"
-        ) || matchingContacts[0]; // If primary exists, use it, otherwise use the oldest (first in ASC order)
+        ) || matchingContacts[0]; 
 
-      // Check if we need to create a new secondary contact
+      
       const existingContactWithEmail = matchingContacts.some(
         (c) => c.email === email
       );
@@ -66,7 +65,7 @@ export const identifyContact = async (
       );
 
       if (!existingContactWithEmail || !existingContactWithPhone) {
-        // Create new secondary contact linking to the primary contact
+        
         await db.insert(contacts).values({
           email: email || null,
           phoneNumber: phoneNumber || null,
@@ -76,7 +75,7 @@ export const identifyContact = async (
       }
 
 
-      // Consolidate all related contacts (including the newly created secondary if any)
+      
       const allRelatedContacts = await db
         .select()
         .from(contacts)
@@ -87,7 +86,7 @@ export const identifyContact = async (
           )
         );
 
-      // Create consolidated response
+      
       const consolidatedContact: ConsolidatedContact = {
         primaryContactId: primaryContact.id,
         emails: [
