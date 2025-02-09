@@ -39,26 +39,23 @@ If neither exists, a new primary contact is created.
 ## Setup & Installation
 
 * Clone the repository:
-```json
-  git clone https://github.com/yourusername/bitespeed-contact-identification.git
-```
-```json
+````bash
+git clone https://github.com/yourusername/bitespeed-contact-identification.git
+```bash
 cd bitespeed-contact-identification
-```
+
 * Install dependencies:
-```json
+```bash
 npm install
-```
+
 
 ## Set up environment variables in a .env file:
-```json
+```bash
 POST =
 DATABASE_URL=your_postgresql_connection_string
-```
 ## Run the application:
-```json
+```bash
 npm run dev
-```
 
 ##  Deployment
 This project is deployed on Render. You can test the live API at: https://bitespeed-assignment-0e2a.onrender.com
